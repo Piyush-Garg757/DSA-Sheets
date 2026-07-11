@@ -1,0 +1,111 @@
+ starting node is called root node
+
+ ending node is called leaf node 
+
+ a particular node and the tree below it which it forms as a root is called subtree
+
+ for a particular node, its parent node , grand parent node, grand grand parent node and so on are called its ancestors
+
+
+ Types of binary trees:
+
+ 1. Full binary tree - either has 0 or 2 children 
+
+          1
+         / \
+        2   3
+           / \
+          4   5
+         / \
+        6   7
+        
+ 2. Complete binary tree - all levels are completely filled except the last level and the last node has all nodes in left as possible
+
+        1
+       / \
+      2   3
+     / \
+    4   5
+ This is a Complete binary tree as all levels have all possible children except the last node which is completely fine 
+
+        1
+       / \
+      2   3
+     / \ /
+    4  5 6    This is fine too
+
+        1
+       / \
+      2   3
+         / \
+        6   7  But this is not fine   last level me kam ho to chalega but missing right ki taraf hone chahiye    matlab left se hare hone chahiye jaisa ki definition mein bhi likha tha  the last node has all nodes in left as possible
+
+ 3. Perfect binary Tree - all leaf nodes are at the same levels
+
+          1
+         / \
+        2   3
+       / \ / \
+      4  5 6  7
+
+ 4. Balanced binary tree - height is max(logn)  where n is the number of nodes
+
+            1
+          /   \
+         2     3
+        / \   / \
+       4   5 6   7
+      /
+     8
+
+ 5. Degenerate tree - every parent node has one child 
+
+        1          
+       /
+      2
+     /
+    3
+   /
+  4
+
+      1
+     /
+    2
+     \
+      3
+     /
+    4
+
+
+
+
+ Representation of a binary Tree in cpp
+
+                5
+              /   \
+             6     7
+           /   \
+          8     9
+               /
+              1
+
+        [L|5|R]
+         /     \
+        /       \
+   [L|6|R]    [L|7|R]
+    /    \      /   \
+   /      \   null null
+[L|8|R] [L|9|R]
+ /   \    /   \
+N   N [L|1|R] N
+        /   \
+       N     N  where N =  null
+
+
+ Traversal techniques:
+ 1. DFS - Depth first search . It has further 3 types :
+          1. Inorder Traversal (Left Root Right)
+          2. Preorder Traversal (Root Left Right)
+          3. Postorder Traversal (Left Right Root)
+
+ 2. BFS - Breadth first search - level by level print karega

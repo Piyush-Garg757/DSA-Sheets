@@ -1,0 +1,30 @@
+&num gives the address of num
+
+Pointer stores the address of num
+int *Pointer=&num
+
+cout<<*Pointer se num ki value ayegi 
+cout<<Pointer se address
+
+sizeof Pointer is 8 for 64 bit system and 4 for 32 bit system
+
+int *q=Pointer ise karne se q bhi Pointer ki tarah hi kaam karne lagega
+
+a[i] =*(a+i) or i[a] =*(i+a)  both are correct
+
+int *p=0;
+intn i=110;
+*p=i;
+cout<< *p;   ye segmentation fault dega aise karna allowed nahi hai 
+yahi p=&i  kar denge to chal jayega
+
+
+
+int i=5;
+int &j=i;
+to j is reference variable aur i aur j same block 5 ko point kar rahe hain 
+
+j++;
+j aur i dono 6 ho gaye
+
+aur ye function vagera meoinn pass by reference karne ke liye use hota hai

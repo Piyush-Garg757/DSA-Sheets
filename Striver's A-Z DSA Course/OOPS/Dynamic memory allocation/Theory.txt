@@ -1,0 +1,32 @@
+use new keyword when you want to allocate memory dynamically
+aur ye address return karta hai na ki name 
+to we use pointers
+
+int *p=new int;  overall is stateme t ko puri 12 byte allocate hui hai kyuki *P 8 byte lega static memory se aur int 4 byte heap memory se 
+
+
+for array of size n
+cin>>n;
+int *a=new int[n];
+for(int i=0;i<n;i++) cin>>a[i];
+aur function mein pass hoga to &a se hoga but function ke andar a hi ayega na ki &address
+
+
+delete keyword use karke memory free karni padti hai manually
+delete i;
+delete []a;
+
+for 2d arrays
+int n;
+cin>>n;
+int **a=new int*[n];
+int m;
+cin>>m;
+for(int i=0;i<n;i++)
+{
+    a[i]=new int[m];
+}
+
+ab releasing
+for(int i=0;i<n;i++) delete []a[i];
+delete []a;

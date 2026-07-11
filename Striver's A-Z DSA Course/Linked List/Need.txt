@@ -1,0 +1,10 @@
+Array mein dikkatein thi size fixed hai aur elements contiguous locations pe hain -> to koi element add karna ho to hum sure nahi hain ki aage ki conigoug memory free hai ki nahi aur size khatam ho gaya to 
+Aur beech mein koi element daalna ho ya remove kara ho to usmein dikkatein thi
+
+LL mein aisa nahi hai 
+ismein contigous memory nahi hoti to agar next contigous memory free nahi bhi hai to kisi bhi memory pe data store ho jayega
+
+to ismein traversal kaise hota hai ->
+shuru vale node ko head kehte hain usmein next node ka address daalte hain aise hi next mein uske next ka aur last ka next nullptr aur last node ko tail kehte hain
+
+Real life mein browser mein use hota hai -> humein pata nahi hota kitna aage jana hai kitna bhi aage ja skate hain aur peeche aa sakte hain
