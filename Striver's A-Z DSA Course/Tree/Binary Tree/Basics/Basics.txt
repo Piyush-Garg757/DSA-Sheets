@@ -109,3 +109,96 @@ N   N [L|1|R] N
           3. Postorder Traversal (Left Right Root)
 
  2. BFS - Breadth first search - level by level print karega
+
+
+ Traversals Given	Unique Tree Banega?
+Inorder + Preorder	✅ Yes
+Inorder + Postorder	✅ Yes
+Preorder + Postorder	❌ No (generally)
+Ab dekhte hain kyun.
+
+Case 1: Inorder + Preorder
+Suppose
+Preorder : A B D E C F
+Inorder  : D B E A C F
+Step 1
+Preorder ka pehla element hamesha root hota hai.
+Root = A
+Ab inorder me A ko dhoondo.
+D B E |A| C F
+Inorder automatically split ho gaya.
+Left subtree
+D B E
+Right subtree
+C F
+Ab preorder me pata hai ki root ke baad pehle left subtree ke nodes aayenge.
+To recursively same process.
+Isliye tree uniquely ban jata hai.
+
+Case 2: Inorder + Postorder
+Example
+Postorder : D E B F C A
+Inorder   : D B E A C F
+Postorder ka last element root hota hai.
+Root = A
+Inorder me A ko dhoondo.
+D B E |A| C F
+Fir left aur right subtree clearly separate ho gaye.
+Again recursion.
+Unique tree.
+Sabse important baat
+Inorder hi batata hai ki root ke left me kaun hai aur right me kaun hai.
+Left Subtree | Root | Right Subtree
+Ye information kisi aur traversal me nahi hoti.
+Ab dekhte hain Preorder + Postorder
+Suppose
+Preorder  : A B C
+Postorder : C B A
+Ab batao tree kya hai?
+Tree 1
+    A
+   /
+  B
+ /
+C
+Preorder
+A B C
+Postorder
+C B A
+Tree 2
+    A
+   /
+  B
+   \
+    C
+Preorder
+A B C
+Postorder
+C B A
+Tree 3
+    A
+     \
+      B
+     /
+    C
+Preorder
+A B C
+Postorder
+C B A
+Tree 4
+    A
+     \
+      B
+       \
+        C
+Preorder
+A B C
+Postorder
+C B A
+Dekho,
+4 alag trees hain.
+Lekin
+Preorder = A B C
+Postorder = C B A
+sabme same hai.
+Isliye uniquely reconstruct nahi kar sakte.
