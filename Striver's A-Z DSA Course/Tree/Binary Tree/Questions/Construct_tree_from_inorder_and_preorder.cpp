@@ -41,8 +41,7 @@ public:
         unordered_map<int, int> mpp;
         for (int i = 0; i < pre.size(); i++)
             mpp[in[i]] = i;
-        TreeNode *root =
-            solve(pre, 0, pre.size() - 1, in, 0, in.size() - 1, mpp);
+        TreeNode *root = solve(pre, 0, pre.size() - 1, in, 0, in.size() - 1, mpp);
         return root;
     }
 };
