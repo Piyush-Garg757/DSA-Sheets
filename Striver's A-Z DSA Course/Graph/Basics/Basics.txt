@@ -1,0 +1,355 @@
+1. Graph kya hota hai?
+
+Graph ek non-linear data structure hai jisme objects ko vertices (nodes) aur unke beech ke connections ko edges kehte hain.
+
+Graph ko generally:
+
+G=(V,E)
+
+se represent karte hain.
+
+V = set of vertices/nodes
+E = set of edges
+
+Example:
+
+    A
+   / \
+  B---C
+   \
+    D
+
+Yahan:
+
+Vertices:
+A, B, C, D
+
+Edges:
+(A,B), (A,C), (B,C), (B,D)
+
+2. Vertex / Node
+
+Vertex ya Node graph ka individual element hota hai.
+
+Example:
+
+A ---- B ---- C
+
+Yahan A, B, C vertices/nodes hain.
+
+Vertex = Node
+Dono terms generally interchangeably use hote hain.
+
+3. Edge
+
+Edge do vertices ke beech ka connection hota hai.
+
+A -------- B
+    edge
+
+Yahan A aur B vertices hain aur unke beech ka connection edge hai.
+
+Graph ke type ke according edge:
+
+Directed ho sakti hai
+Undirected ho sakti hai
+Weighted ho sakti hai
+Unweighted ho sakti hai
+4. Undirected Graph
+
+Undirected graph mein edge ki direction nahi hoti.
+
+A -------- B
+
+Iska matlab:
+
+A → B bhi possible hai aur B → A bhi.
+
+Mathematically:
+
+(A, B) = (B, A)
+
+Example:
+
+Facebook friendship ko undirected graph se represent kar sakte hain.
+
+A aur B friends hain → dono ek doosre ke connected hain.
+
+5. Directed Graph
+
+Directed graph mein edge ki direction hoti hai.
+
+A -------> B
+
+Iska matlab:
+
+A → B
+
+Lekin zaroori nahi ki:
+
+B → A
+
+bhi ho.
+
+Directed edge ko directed edge / arc bhi kaha jata hai.
+
+Example:
+
+Twitter/X par:
+
+A -----> B
+
+ka matlab A follows B ho sakta hai, lekin B necessarily A ko follow nahi karta.
+
+6. Weighted Graph
+
+Jab edges ke saath koi weight/cost/distance associated ho, graph weighted hota hai.
+
+A ----5---- B
+ \          /
+  2        7
+   \      /
+      C
+
+Edges:
+
+A-B → 5
+A-C → 2
+C-B → 7
+
+Weight represent kar sakta hai:
+
+Distance
+Cost
+Time
+Network latency
+etc.
+7. Unweighted Graph
+
+Jab edges ke saath koi weight nahi hota:
+
+A ----- B
+|       |
+|       |
+C ----- D
+
+Ye unweighted graph hai.
+
+8. Degree
+
+Undirected graph mein kisi vertex se connected edges ki total number ko us vertex ki degree kehte hain.
+
+Example:
+
+    B
+    |
+A---C---D
+    |
+    E
+
+C ke saath edges:
+
+C-B
+C-A
+C-D
+C-E
+
+Therefore:
+
+Degree(C)=4
+
+A ki degree:
+
+Degree(A)=1
+9. Important Degree Formula
+
+Undirected graph mein:
+
+∑Degree(v)=2E
+
+where E = total number of edges.
+
+Reason:
+
+Har edge 2 vertices ki degree mein contribute karti hai.
+
+Example:
+
+A ----- B
+|       |
+|       |
+C ----- D
+
+Total edges = 4
+
+Degrees:
+
+A = 2
+B = 2
+C = 2
+D = 2
+
+Total:
+
+2+2+2+2=8
+
+And:
+
+2E=2(4)=8
+10. In-Degree
+
+Directed graph mein kisi node ke andar aane wali edges ki number ko in-degree kehte hain.
+
+Example:
+
+A -----> C <----- B
+          |
+          ↓
+          D
+
+C ke paas incoming edges:
+
+A → C
+B → C
+
+Therefore:
+
+InDegree(C)=2
+11. Out-Degree
+
+Directed graph mein kisi node se bahar jaane wali edges ki number ko out-degree kehte hain.
+
+Same example:
+
+A -----> C <----- B
+          |
+          ↓
+          D
+
+C se ek edge bahar ja rahi hai:
+
+C → D
+
+Therefore:
+
+OutDegree(C)=1
+12. Degree in Directed Graph
+
+Directed graph mein:
+
+Degree(v)=InDegree(v)+OutDegree(v)
+
+Example:
+
+A -----> C -----> D
+B -----> C
+
+For C:
+
+In-degree = 2
+Out-degree = 1
+
+Therefore:
+
+Degree(C)=2+1=3
+13. Path
+
+Graph mein ek vertex se doosre vertex tak vertices/edges ka sequence path kehlata hai.
+
+Example:
+
+A ---- B ---- C ---- D
+
+A se D ka path:
+
+A → B → C → D
+
+Path mein generally vertices repeat nahi hote.
+
+Is path ki length = 3 edges.
+
+Path ki length usually number of edges se measure hoti hai.
+
+14. Path Length
+
+Agar:
+
+A → B → C → D
+
+hai, toh edges:
+
+A-B
+B-C
+C-D
+
+Therefore:
+
+Path Length=3
+
+Vertices = 4.
+
+15. Simple Path
+
+Aisa path jisme koi vertex repeat nahi hota, simple path kehlata hai.
+
+Example:
+
+A → B → C → D
+
+Simple path hai.
+
+Lekin:
+
+A → B → C → B → D
+
+simple path nahi hai because B repeat ho raha hai.
+
+16. Cycle
+
+Agar kisi path mein starting vertex par wapas aa sakte hain, toh cycle hoti hai.
+
+Example:
+
+    A
+   / \
+  B---C
+
+Cycle:
+
+A → B → C → A
+
+Starting point A par wapas aa gaye.
+
+17. Cyclic Graph
+
+Jis graph mein at least one cycle ho, use cyclic graph kehte hain.
+
+Example:
+
+    A
+   / \
+  B---C
+
+Ye cyclic graph hai because:
+
+A → B → C → A
+
+possible hai.
+
+18. Acyclic Graph
+
+Jis graph mein koi cycle nahi hoti, use acyclic graph kehte hain.
+
+Example:
+
+A
+|
+B
+|
+C
+|
+D
+
+Isme koi cycle nahi hai.
+
+Therefore, ye acyclic graph hai.
