@@ -11,6 +11,7 @@ int main()
         int u, v;
         cin >> u >> v;
         adj[u].push_back(v);
+        // if directed graph then comment the below line
         adj[v].push_back(u);
     } 
     return 0;
