@@ -71,3 +71,35 @@ But how are we going to implement it in the adjacency list?
 Earlier in the adjacency list, we were storing a list of integers in each index, but for weighted graphs, we will store pairs (node, edge weight) in it.
 
 vector< pair <int,int> > adjList[n+1];
+
+
+
+Connected Components
+
+Problem Statement: Given an undirected Graph consisting of V vertices numbered from 0 to V-1 and E edges. The ith edge is represented by [ai,bi], denoting a edge between vertex ai and bi. We say two vertices u and v belong to a same component if there is a path from u to v or v to u. Find the number of connected components in the graph.
+
+A connected component is a subgraph of a graph in which there exists a path between any two vertices, and no vertex of the subgraph shares an edge with a vertex outside of the subgraph.
+
+
+Examples
+Input: V=4, edges=[[0,1],[1,2]]
+Output: 2
+Explanation: Vertices {0,1,2} forms the first component and vertex 3 forms the second component.
+Input:V = 7, edges = [[0, 1], [1, 2], [2, 3], [4, 5]]
+Output: 3
+Explanation: The edges [0, 1], [1, 2], [2, 3] form a connected component with vertices {0, 1, 2, 3}
+The edge [4, 5] forms another connected component with vertices {4, 5}.
+Therefore, the graph has 3 connected components: {0, 1, 2, 3}, {4, 5}, and the isolated vertices {6}.
+
+Approach
+Algorithm
+A connected component is a group of vertices in which every vertex can be reached from any other vertex in the same group. To count the number of connected components, we need to explore the graph so that each vertex is visited exactly once and grouped into its component.
+
+We can do this using either DFS or BFS. Each time we start a new search from an unvisited vertex, we discover a new component and mark all vertices in that component as visited. This ensures that we don’t count the same component more than once.
+Use a visited array to track the vertices that has been visited once.
+Build an adjacency list from the given edges for efficient traversal.
+For each vertex:
+If the vertex is not visited, perform DFS/BFS starting from it.
+This traversal will mark all vertices in the same component as visited.
+Increment the number of components for every traversal.
+Once all the vertices are visited, return the number of connected components.
