@@ -58,3 +58,16 @@ This representation is much better than the adjacency matrix, as matrix represen
 For directed graphs, if there is an edge between u and v it means the edge only goes from u to v, i.e., v is the neighbor of u, but vice versa is not true. The space needed to represent a directed graph using its adjacency list is E locations, where E denotes the number of edges, as here each edge data appears only once.
 
 Space complexity = O(E)
+
+
+Weighted Graph Representation
+
+As of now, we were considering graphs with unit weight edges (i.e., if there is an edge between two nodes then the weight on the edge is unit weight ), now what if there are weights on its edges as shown in the following example?
+
+For the adjacency matrix, it is much simpler.
+
+But how are we going to implement it in the adjacency list?
+
+Earlier in the adjacency list, we were storing a list of integers in each index, but for weighted graphs, we will store pairs (node, edge weight) in it.
+
+vector< pair <int,int> > adjList[n+1];
