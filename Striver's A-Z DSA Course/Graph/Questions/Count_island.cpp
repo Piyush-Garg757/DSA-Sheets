@@ -109,3 +109,47 @@ public:
         return ans;
     }
 };
+
+// Leetcode version me upar neeche aage peeche vale hi eighbours mane jate hain to uss version ke liye
+class Solution
+{
+public:
+    void dfs(int row, int col, vector<vector<char>> &a)
+    {
+        a[row][col] = '0';
+        int n = a.size(), m = a[0].size();
+        for (int i = -1; i <= 1; i++)
+        {
+            int delrow = row + i, delcol = col;
+            if (delrow >= 0 && delrow < n && a[delrow][delcol] == '1')
+            {
+                dfs(delrow, delcol, a);
+            }
+        }
+        for (int j = -1; j <= 1; j++)
+        {
+            int delrow = row, delcol = col + j;
+            if (delcol >= 0 && delcol < m && a[delrow][delcol] == '1')
+            {
+                dfs(delrow, delcol, a);
+            }
+        }
+    }
+    int numIslands(vector<vector<char>> &a)
+    {
+        int n = a.size(), m = a[0].size(), ans = 0;
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < m; j++)
+            {
+                if (a[i][j] == '1')
+                {
+                    dfs(i, j, a);
+                    ans++;
+                }
+            }
+        }
+        return ans;
+    }
+};
+// Also ismein visited alag se nahi banaya hai usi mein 1 se 0 karta ja raha hu
