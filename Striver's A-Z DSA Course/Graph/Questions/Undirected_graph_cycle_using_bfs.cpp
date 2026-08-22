@@ -50,7 +50,7 @@ public:
             adj[a[i][1]].push_back(a[i][0]);
         }
         vector<int> visited(v, 0);
-        for (int i = 0; i < v; i++) // Connected components ho sakte hian   to uske luye aise kiya
+        for (int i = 0; i < v; i++) // Connected components ho sakte hain   to uske liye aise kiya
         {
             if (!visited[i])
             {
