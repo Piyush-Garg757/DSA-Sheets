@@ -1,0 +1,7 @@
+if we can color the whole graph using 2 colors such that no two adjacent nodes have the same color then the grph is called bipartite graph
+
+acyclic graph is always bipartite 
+
+any graph with even cycle length is always bipartite
+
+any graph having odd cycle length is never bipartite
