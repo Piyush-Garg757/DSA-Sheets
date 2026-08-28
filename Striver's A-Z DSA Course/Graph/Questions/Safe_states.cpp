@@ -66,3 +66,41 @@ public:
     }
 };
 // TC - O(e+v)  SC - O(e)
+
+
+
+// Using bfs - ismein jiski outdegree 0 hogi vo to pakka safe hogi but bfs yani basically kahn's mein hum indegree ki baat klarte hain isilye hum saare edges reverse kar denge aur fir normal topo sort using bfs jaise karte the vese karenge    jo jo 0 hota jayega use ans mein oush kar denge kyuki vo safe hain aur fir end me sort karke return
+class Solution {
+	public:
+	vector<int> safeNodes(int v, vector<vector<int>> & a) {
+		// Code here
+		vector<int> indegree(v, 0);
+		vector<int> ans;
+		vector<int> adj[v];
+		queue<int> q;
+		for (int i = 0; i<a.size(); i++)
+			{
+			adj[a[i][1]].push_back(a[i][0]);
+			indegree[a[i][0]]++;
+			
+		}
+		for (int i = 0; i<v; i++)
+			if (indegree[i] == 0)
+				q.push(i);
+		while (!q.empty())
+			{
+			int node = q.front();
+			q.pop();
+			ans.push_back(node);
+			for (auto i:adj[node])
+				{
+				indegree[i]--;
+				if (indegree[i] == 0)
+					q.push(i);
+			}
+		}
+		sort(ans.begin(), ans.end());
+		return ans;
+	}
+};
+// TC - O(e+v)  SC - O(e+v)
