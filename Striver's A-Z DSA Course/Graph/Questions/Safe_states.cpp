@@ -69,7 +69,7 @@ public:
 
 
 
-// Using bfs - ismein jiski outdegree 0 hogi vo to pakka safe hogi but bfs yani basically kahn's mein hum indegree ki baat klarte hain isilye hum saare edges reverse kar denge aur fir normal topo sort using bfs jaise karte the vese karenge    jo jo 0 hota jayega use ans mein oush kar denge kyuki vo safe hain aur fir end me sort karke return
+// Using bfs - ismein jiski outdegree 0 hogi vo to pakka safe hogi Eventual Safe States mein edges reverse karne ka main reason ye hai ki terminal nodes se backward traversal karna easy ho jaata hai aur fir normal topo sort using bfs jaise karte the vese karenge    jo jo 0 hota jayega use ans mein oush kar denge kyuki vo safe hain aur fir end me sort karke return
 class Solution {
 	public:
 	vector<int> safeNodes(int v, vector<vector<int>> & a) {
