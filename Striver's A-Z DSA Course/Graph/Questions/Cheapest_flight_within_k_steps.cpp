@@ -64,3 +64,45 @@ public:
     }
 };
 // TC - O(mnlog(mn))  SC - O(mn)
+
+// ismein humne dekh aki k har baar +1 se badh raha hai so humein priority queue ki need hi nahi hai queue se bhi kaam chal jayega
+class Solution
+{
+public:
+    int findCheapestPrice(int n, vector<vector<int>> &a, int src, int dest,
+                          int k)
+    {
+        vector<pair<int, int>> adj[n];
+        for (int i = 0; i < a.size(); i++)
+        {
+            adj[a[i][0]].push_back({a[i][1], a[i][2]});
+        }
+        vector<int> price(n, INT_MAX);
+        price[src] = 0;
+        queue<pair<pair<int, int>, int>> q;
+        q.push({{0, 0}, src});
+        while (!q.empty())
+        {
+            int cost = q.front().first.second;
+            int node = q.front().second;
+            int steps = q.front().first.first;
+            q.pop();
+            if (steps > k)
+                continue;
+            for (auto i : adj[node])
+            {
+                int c = i.second;
+                int n = i.first;
+                if (cost + c < price[n])
+                {
+                    price[n] = cost + c;
+                    q.push({{steps + 1, price[n]}, n});
+                }
+            }
+        }
+        if (price[dest] == INT_MAX)
+            return -1;
+        return price[dest];
+    }
+};
+// TC - O(e+v)  SC - O(e+v)
