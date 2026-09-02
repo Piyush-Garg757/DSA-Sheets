@@ -16,6 +16,9 @@ Explanation: Each cell dist[i][j] in the output shows the shortest distance from
 From 2 to 0 shortest distance should be 2 by following path 2 -> 1 -> 0
 From 1 to 2 shortest distance should be 3 by following path 1 -> 0 -> 2*/
 
+
+// ye basically brute force hai jo har node se har node tak ka min poth deta hai 
+// a[i][j] = a[i][k] + a[k][j]  basically sabke liye try kar leta hai jaha se bhi min path mile
 class Solution
 {
 public:
