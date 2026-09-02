@@ -1,0 +1,81 @@
+1. Sabse pehle: Spanning Tree kya hai?
+
+Maan le graph hai:
+
+      2
+  A ------- B
+  |         |
+  4         3
+  |         |
+  C ------- D
+      1
+
+Spanning Tree ka matlab:
+
+saare vertices connected hone chahiye
+cycle nahi honi chahiye
+agar V vertices hain, toh tree mein exactly V - 1 edges hongi
+
+Example:
+
+A -- B
+     |
+     D
+     |
+     C
+
+Ye spanning tree ho sakta hai.
+
+2. Minimum Spanning Tree kya hai?
+
+Agar edges ke weights hain, toh:
+
+Aisa spanning tree jiska total edge weight minimum ho = MST
+
+Example:
+
+A --2-- B
+|       |
+4       3
+|       |
+C --1-- D
+
+Ek possible tree:
+
+A --2-- B
+     |
+     3
+     |
+     D --1-- C
+
+Total:
+
+2 + 3 + 1 = 6
+
+Agar koi aur spanning tree ka weight 7 hai, toh ye MST hai.
+
+3. MST ke 3 golden properties
+Property 1
+
+MST mein exactly:
+
+V - 1 edges
+Property 2
+
+MST mein cycle nahi hoti.
+
+Agar cycle aa gayi, toh cycle ki kisi edge ko remove karke bhi graph connected rahega.
+
+So minimum tree mein cycle ka koi fayda nahi.
+
+Property 3
+
+MST connected undirected weighted graph ke liye hota hai.
+
+Normally MST questions mein:
+
+Undirected + Weighted
+
+graph hota hai.
+
+Directed graph ke liye normal MST concept nahi use karte.
