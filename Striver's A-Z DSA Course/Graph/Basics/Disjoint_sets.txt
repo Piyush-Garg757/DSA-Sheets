@@ -1,0 +1,1189 @@
+# Disjoint Set
+
+## Union by Rank | Union by Size | Path Compression
+
+---
+
+## 1. What is a Disjoint Set?
+
+A **Disjoint Set** (also called **Union-Find**) is a data structure used to maintain a collection of **disjoint sets/components**.
+
+It is mainly useful when we have a graph whose edges are being added dynamically and we repeatedly need to answer:
+
+> **Are two nodes part of the same connected component?**
+
+For example:
+
+```text
+Component 1          Component 2
+
+    1                   4
+   / \                 / \
+  2   3               5   6
+```
+
+Suppose we are asked:
+
+```text
+Are node 1 and node 5 in the same component?
+```
+
+The answer is:
+
+```text
+NO
+```
+
+We could solve this using **DFS/BFS**, but that would require traversing the graph.
+
+For a single query:
+
+```text
+DFS/BFS → O(V + E)
+```
+
+But when the graph keeps changing and we have many such queries, repeatedly running DFS/BFS becomes expensive.
+
+This is where **Disjoint Set** is useful.
+
+---
+
+# 2. Why do we need Disjoint Set?
+
+Consider the following edges:
+
+```text
+{1,2}, {2,3}, {4,5}, {6,7}, {5,6}, {3,7}
+```
+
+Suppose we add these edges one by one.
+
+Initially:
+
+```text
+1    2    3    4    5    6    7
+```
+
+After adding:
+
+```text
+{1,2}
+```
+
+we get:
+
+```text
+1 -- 2
+
+3
+
+4
+
+5
+
+6
+
+7
+```
+
+After adding:
+
+```text
+{2,3}
+```
+
+we get:
+
+```text
+1 -- 2 -- 3
+
+4
+
+5
+
+6
+
+7
+```
+
+After adding:
+
+```text
+{4,5}
+```
+
+we get:
+
+```text
+1 -- 2 -- 3
+
+4 -- 5
+
+6
+
+7
+```
+
+After adding:
+
+```text
+{6,7}
+```
+
+we get:
+
+```text
+1 -- 2 -- 3
+
+4 -- 5
+
+6 -- 7
+```
+
+After adding:
+
+```text
+{5,6}
+```
+
+we get:
+
+```text
+1 -- 2 -- 3
+
+4 -- 5 -- 6 -- 7
+```
+
+At this point:
+
+```text
+1 and 4 → different components
+```
+
+Finally, add:
+
+```text
+{3,7}
+```
+
+Now:
+
+```text
+1 -- 2 -- 3
+          |
+          7 -- 6 -- 5 -- 4
+```
+
+Therefore:
+
+```text
+1 and 4 → same component
+```
+
+So the answer to a query can change whenever a new edge is added.
+
+This is called a:
+
+## Dynamic Graph
+
+A **dynamic graph** is a graph whose structure keeps changing over time.
+
+For example:
+
+```text
+Initially:
+
+1    2    3    4
+```
+
+After adding edges:
+
+```text
+1 -- 2       3 -- 4
+```
+
+and later:
+
+```text
+1 -- 2 -- 3 -- 4
+```
+
+The connected components have changed.
+
+Disjoint Set is particularly useful for such situations.
+
+---
+
+# 3. Functionalities of Disjoint Set
+
+A Disjoint Set mainly provides two operations:
+
+### 1. Find
+
+```cpp
+findPar(node)
+```
+
+It finds the **ultimate parent** (root) of a node.
+
+### 2. Union
+
+```cpp
+unionByRank(u, v)
+```
+
+or
+
+```cpp
+unionBySize(u, v)
+```
+
+It combines the components containing `u` and `v`.
+
+So, in short:
+
+```text
+Disjoint Set
+│
+├── findPar()
+│
+└── Union
+    ├── Union by Rank
+    └── Union by Size
+```
+
+---
+
+# 4. Parent and Ultimate Parent
+
+Suppose we have:
+
+```text
+        1
+       / \
+      2   3
+     /
+    4
+```
+
+Here:
+
+```text
+parent[4] = 2
+parent[2] = 1
+parent[1] = 1
+```
+
+The **immediate parent** of node `4` is:
+
+```text
+2
+```
+
+But the **ultimate parent** of node `4` is:
+
+```text
+1
+```
+
+The ultimate parent is simply the **root of the component**.
+
+Therefore:
+
+```text
+4 → 2 → 1
+          ↑
+     Ultimate Parent
+```
+
+---
+
+# 5. Why do we need the Ultimate Parent?
+
+Suppose we have:
+
+```text
+        4
+       / \
+      5   6
+          |
+          7
+```
+
+Here:
+
+```text
+parent[5] = 4
+parent[7] = 6
+```
+
+The immediate parents of `5` and `7` are different:
+
+```text
+parent[5] = 4
+parent[7] = 6
+```
+
+But both belong to the same component because:
+
+```text
+ultimateParent(5) = 4
+ultimateParent(7) = 4
+```
+
+Therefore:
+
+```text
+If ultimateParent(u) == ultimateParent(v)
+        ↓
+u and v belong to the same component
+```
+
+This is the main purpose of `findPar()`.
+
+---
+
+# 6. Union by Rank
+
+To implement **Union by Rank**, we maintain two arrays:
+
+```cpp
+parent[]
+rank[]
+```
+
+For `N` nodes:
+
+```text
+parent → stores the parent of each node
+rank   → stores the rank/height information of each tree
+```
+
+---
+
+## Initial Configuration
+
+Initially, every node is its own component.
+
+For:
+
+```text
+0  1  2  3  4
+```
+
+we have:
+
+```text
+parent = [0, 1, 2, 3, 4]
+rank   = [0, 0, 0, 0, 0]
+```
+
+That means:
+
+```text
+parent[i] = i
+```
+
+Every node is initially its own parent.
+
+---
+
+# 7. What is Rank?
+
+In the context of Union by Rank, rank is used as a measure of the **tree's height** (more precisely, an upper bound on height).
+
+We use rank to decide:
+
+> Which tree should be attached below the other tree?
+
+The idea is simple:
+
+```text
+Smaller-rank tree
+        ↓
+gets attached to
+        ↓
+Larger-rank tree
+```
+
+This helps keep the tree shallow.
+
+---
+
+# 8. Union by Rank Algorithm
+
+Suppose we want to perform:
+
+```cpp
+unionByRank(u, v)
+```
+
+### Step 1: Find ultimate parents
+
+```text
+pu = findPar(u)
+pv = findPar(v)
+```
+
+Here:
+
+```text
+pu = ultimate parent of u
+pv = ultimate parent of v
+```
+
+### Step 2: Check if both already belong to the same component
+
+If:
+
+```text
+pu == pv
+```
+
+then `u` and `v` are already connected.
+
+So:
+
+```text
+No union is required.
+```
+
+### Step 3: Compare ranks
+
+There are three cases.
+
+---
+
+## Case 1: rank[pu] < rank[pv]
+
+Attach `pu` under `pv`.
+
+```text
+parent[pu] = pv
+```
+
+---
+
+## Case 2: rank[pv] < rank[pu]
+
+Attach `pv` under `pu`.
+
+```text
+parent[pv] = pu
+```
+
+---
+
+## Case 3: rank[pu] == rank[pv]
+
+We can attach either tree to the other.
+
+For example:
+
+```text
+parent[pv] = pu
+```
+
+and then increase the rank of `pu`:
+
+```text
+rank[pu]++;
+```
+
+---
+
+# 9. Example of Union by Rank
+
+Consider the edges:
+
+```text
+{1,2}, {2,3}, {4,5}, {6,7}, {5,6}
+```
+
+Initially:
+
+```text
+1    2    3    4    5    6    7
+```
+
+Each node is its own parent:
+
+```text
+parent = [1,2,3,4,5,6,7]
+rank   = [0,0,0,0,0,0,0]
+```
+
+---
+
+### Union(1,2)
+
+Both ranks are equal.
+
+Attach `2` under `1`:
+
+```text
+    1
+    |
+    2
+```
+
+Now:
+
+```text
+parent[2] = 1
+rank[1] = 1
+```
+
+---
+
+### Union(2,3)
+
+First find the ultimate parent of `2`.
+
+```text
+2 → 1
+```
+
+So:
+
+```text
+pu = 1
+pv = 3
+```
+
+Their ranks are:
+
+```text
+rank[1] = 1
+rank[3] = 0
+```
+
+Therefore attach `3` under `1`:
+
+```text
+    1
+   / \
+  2   3
+```
+
+---
+
+### Union(4,5)
+
+Both ranks are equal.
+
+Attach `5` under `4`:
+
+```text
+    4
+    |
+    5
+```
+
+and:
+
+```text
+rank[4] = 1
+```
+
+---
+
+### Union(6,7)
+
+Similarly:
+
+```text
+    6
+    |
+    7
+```
+
+and:
+
+```text
+rank[6] = 1
+```
+
+---
+
+### Union(5,6)
+
+First find ultimate parents:
+
+```text
+5 → 4
+6 → 6
+```
+
+So:
+
+```text
+pu = 4
+pv = 6
+```
+
+Both have:
+
+```text
+rank = 1
+```
+
+So we can attach one to the other.
+
+For example:
+
+```text
+parent[6] = 4
+rank[4]++
+```
+
+The resulting structure becomes:
+
+```text
+        4
+       / \
+      5   6
+           \
+            7
+```
+
+Now nodes:
+
+```text
+4, 5, 6, 7
+```
+
+belong to the same component.
+
+---
+
+# 10. Path Compression
+
+Now suppose we have a chain:
+
+```text
+1
+|
+2
+|
+3
+|
+4
+```
+
+So:
+
+```text
+4 → 3 → 2 → 1
+```
+
+If we want to find the ultimate parent of `4`, we have to travel:
+
+```text
+4 → 3 → 2 → 1
+```
+
+This takes multiple steps.
+
+But once we know that the ultimate parent of `4` is `1`, there is no reason to keep this long chain.
+
+We can directly connect `4` to `1`.
+
+This technique is called:
+
+## Path Compression
+
+After finding the ultimate parent, we update the parent of every node on that path to the ultimate parent.
+
+Before:
+
+```text
+1
+|
+2
+|
+3
+|
+4
+```
+
+After calling:
+
+```cpp
+findPar(4)
+```
+
+we get:
+
+```text
+    1
+  / | \
+ 2  3  4
+```
+
+Now:
+
+```text
+parent[2] = 1
+parent[3] = 1
+parent[4] = 1
+```
+
+So future `findPar()` operations become much faster.
+
+---
+
+# 11. How does Path Compression work?
+
+We use recursion.
+
+Suppose:
+
+```text
+4 → 3 → 2 → 1
+```
+
+We call:
+
+```cpp
+findPar(4)
+```
+
+The function keeps moving upward until it reaches the root.
+
+### Base Case
+
+If:
+
+```cpp
+parent[node] == node
+```
+
+then the node itself is the ultimate parent.
+
+So:
+
+```cpp
+return node;
+```
+
+### Recursive Case
+
+Otherwise:
+
+```cpp
+parent[node] = findPar(parent[node]);
+```
+
+This is the important line.
+
+While recursion returns back, we directly connect every node to the ultimate parent.
+
+---
+
+# 12. `findPar()` Code
+
+```cpp
+int findPar(int node) {
+
+    if (parent[node] == node)
+        return node;
+
+    return parent[node] = findPar(parent[node]);
+}
+```
+
+The line:
+
+```cpp
+parent[node] = findPar(parent[node]);
+```
+
+does two things:
+
+```text
+1. Finds the ultimate parent
+2. Updates parent[node] to that ultimate parent
+```
+
+This is **Path Compression**.
+
+---
+
+# 13. Complete Union by Rank Code
+
+```cpp
+class DisjointSet {
+
+    vector<int> parent;
+    vector<int> rank;
+
+public:
+
+    DisjointSet(int n) {
+
+        parent.resize(n + 1);
+        rank.resize(n + 1, 0);
+
+        for (int i = 0; i <= n; i++) {
+            parent[i] = i;
+        }
+    }
+
+    int findPar(int node) {
+
+        if (parent[node] == node)
+            return node;
+
+        return parent[node] = findPar(parent[node]);
+    }
+
+    void unionByRank(int u, int v) {
+
+        int pu = findPar(u);
+        int pv = findPar(v);
+
+        // Already in the same component
+        if (pu == pv)
+            return;
+
+        if (rank[pu] < rank[pv]) {
+
+            parent[pu] = pv;
+        }
+
+        else if (rank[pv] < rank[pu]) {
+
+            parent[pv] = pu;
+        }
+
+        else {
+
+            parent[pv] = pu;
+            rank[pu]++;
+        }
+    }
+};
+```
+
+---
+
+# 14. Important Observation
+
+While performing Path Compression, **do NOT update the rank array**.
+
+For example:
+
+```cpp
+parent[node] = findPar(parent[node]);
+```
+
+We only modify:
+
+```text
+parent[]
+```
+
+We do **not** modify:
+
+```text
+rank[]
+```
+
+Why?
+
+Because rank is maintained as the information used by the Union-by-Rank strategy. Path compression changes the actual shape of the tree, but the rank value should not be recalculated or decreased.
+
+Therefore:
+
+```text
+Path Compression
+        ↓
+Changes parent[]
+        ↓
+Does NOT change rank[]
+```
+
+---
+
+# 15. Union by Size
+
+There is another common way to perform union:
+
+```text
+Union by Size
+```
+
+Instead of maintaining:
+
+```cpp
+rank[]
+```
+
+we maintain:
+
+```cpp
+size[]
+```
+
+The `size` array stores the number of nodes in the component/tree.
+
+Initially:
+
+```text
+size[i] = 1
+```
+
+because every node is its own component.
+
+---
+
+## Rule of Union by Size
+
+Suppose:
+
+```text
+size[pu] < size[pv]
+```
+
+Then attach the smaller component under the larger component:
+
+```cpp
+parent[pu] = pv;
+size[pv] += size[pu];
+```
+
+Similarly, if:
+
+```text
+size[pv] < size[pu]
+```
+
+then:
+
+```cpp
+parent[pv] = pu;
+size[pu] += size[pv];
+```
+
+---
+
+# 16. Union by Size Code
+
+```cpp
+class DisjointSet {
+
+    vector<int> parent;
+    vector<int> size;
+
+public:
+
+    DisjointSet(int n) {
+
+        parent.resize(n + 1);
+        size.resize(n + 1, 1);
+
+        for (int i = 0; i <= n; i++) {
+            parent[i] = i;
+        }
+    }
+
+    int findPar(int node) {
+
+        if (parent[node] == node)
+            return node;
+
+        return parent[node] = findPar(parent[node]);
+    }
+
+    void unionBySize(int u, int v) {
+
+        int pu = findPar(u);
+        int pv = findPar(v);
+
+        // Already in the same component
+        if (pu == pv)
+            return;
+
+        if (size[pu] < size[pv]) {
+
+            parent[pu] = pv;
+            size[pv] += size[pu];
+        }
+
+        else {
+
+            parent[pv] = pu;
+            size[pu] += size[pv];
+        }
+    }
+};
+```
+
+---
+
+# 17. Union by Rank vs Union by Size
+
+Both techniques follow the same basic idea:
+
+> **Attach the smaller tree/component under the larger tree/component.**
+
+The difference is what we use to decide which one is smaller.
+
+| Technique     | What we maintain |
+| ------------- | ---------------- |
+| Union by Rank | `rank[]`         |
+| Union by Size | `size[]`         |
+
+### Union by Rank
+
+```text
+Compare rank
+    ↓
+Smaller rank → larger rank
+```
+
+If ranks are equal:
+
+```text
+rank[pu]++
+```
+
+### Union by Size
+
+```text
+Compare size
+    ↓
+Smaller size → larger size
+```
+
+After union:
+
+```text
+size[root] += size[otherRoot]
+```
+
+---
+
+# 18. Why do we use Union by Rank / Size?
+
+Suppose we keep attaching nodes like this:
+
+```text
+1
+|
+2
+|
+3
+|
+4
+|
+5
+|
+6
+```
+
+The tree becomes very tall.
+
+Then:
+
+```cpp
+findPar(6)
+```
+
+may have to traverse many nodes.
+
+Union by Rank/Size tries to prevent this by keeping the tree shallow.
+
+Instead of:
+
+```text
+1
+|
+2
+|
+3
+|
+4
+|
+5
+|
+6
+```
+
+we try to maintain something more like:
+
+```text
+       1
+    /  |  \
+   2   3   4
+  / \
+ 5   6
+```
+
+And Path Compression makes it even flatter.
+
+---
+
+# 19. Time Complexity
+
+When we use:
+
+```text
+Union by Rank + Path Compression
+```
+
+or:
+
+```text
+Union by Size + Path Compression
+```
+
+the amortized time complexity of each operation is:
+
+```text
+O(α(N))
+```
+
+where `α(N)` is the **inverse Ackermann function**.
+
+For all practical input sizes:
+
+```text
+α(N) ≤ 5
+```
+
+So it is effectively treated as:
+
+```text
+Almost O(1)
+```
+
+Important:
+
+```text
+findPar()        → O(α(N)) amortized
+unionByRank()    → O(α(N)) amortized
+unionBySize()    → O(α(N)) amortized
+```
+
+---
+
+# 20. Most Important Interview Points
+
+Remember these points:
+
+### Point 1
+
+Disjoint Set is also called:
+
+```text
+Union-Find
+```
+
+---
+
+### Point 2
+It is mainly used for:
+Dynamic connectivity
+and problems involving connected components.
